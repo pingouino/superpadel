@@ -1,0 +1,16 @@
+{
+  "name": "superpadel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Super Padel : jeu de padel 3D mignon, solo contre l'IA ou jusqu'à 4 joueurs en ligne",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "serve": "npx http-server public -p 8080 -c-1",
+    "test": "node tools/simtest.mjs 2 2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}

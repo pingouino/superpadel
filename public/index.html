@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1f63c9">
+  <title>Super Padel</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎾</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="view"></div>
+
+  <div id="hud" class="hidden">
+    <div id="scoreboard"></div>
+    <div id="messages"></div>
+    <div id="shotname"></div>
+    <div id="power"><span>Puissance</span><div class="bar"><div class="fill"></div></div></div>
+    <div id="hint">À toi de servir ! <b>J</b> Liftado · <b>K</b> Cortado · <b>L</b> Lifté — vise avec les flèches</div>
+    <div id="touch">
+      <div class="stick"><div class="knob"></div></div>
+      <div class="shots">
+        <button data-shot="lob" class="t-lob">Globo</button>
+        <button data-shot="slice" class="t-slice">Cortado</button>
+        <button data-shot="drive" class="t-drive">Liftado</button>
+      </div>
+    </div>
+    <div id="overlay"></div>
+  </div>
+
+  <div id="menu" class="hidden"></div>
+
+  <noscript>Super Padel a besoin de JavaScript.</noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
