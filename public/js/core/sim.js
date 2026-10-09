@@ -226,8 +226,7 @@ export class Sim {
     b.rolling = false;
     b.kick = !!res.kick;
     p.lastHitT = this.time;
-    p.armed = null;
-    p.holdT = 0;
+    for (const q of this.players) if (q.team === p.team) { q.armed = null; q.holdT = 0; }
     p.swing = { kind: anim, t0: this.time };
     const speed = Math.hypot(res.vx, res.vy, res.vz);
     this.stats.totalHits++;

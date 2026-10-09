@@ -8,7 +8,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "serve": "npx http-server public -p 8080 -c-1",
-    "test": "node tools/simtest.mjs 2 2"
+    "test": "node tools/rulestest.mjs && node tools/simtest.mjs 2 1 && node tools/nettest.mjs 0.08"
   },
   "devDependencies": {
     "wrangler": "^4.40.0"

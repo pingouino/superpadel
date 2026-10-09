@@ -88,7 +88,10 @@ export class Session {
       if (idx < 0) return;
       const p = this.sim.players[idx];
       if (d.k === 'in') {
-        p.x = d.x; p.z = d.z; p.vx = d.vx; p.vz = d.vz; p.face = d.f;
+        // juste après le replacement, on ignore les positions envoyées avant que le client l'ait reçu
+        if (this.sim.time - (this.setupT || 0) > 0.25 + r.rtt) {
+          p.x = d.x; p.z = d.z; p.vx = d.vx; p.vz = d.vz; p.face = d.f;
+        }
         p.held = !!d.h; p.armed = d.a ? 'drive' : null; p.aimX = d.ax; p.aimZ = d.ay;
       } else if (d.k === 'hit') {
         d.lag = clamp((d.lag || 0) + r.rtt / 2, 0, 0.2);
@@ -189,6 +192,7 @@ export class Session {
     }
     if (me) this.hud.power(me.armed && me.held ? clamp(me.holdT / 0.65, 0, 1) : me.armed ? -1 : null);
     this.hud.serveHint(sim.phase === 'serve' && sim.serve && sim.serve.id === this.me && sim.serve.state === 'ready');
+    this.sneakers(sim.players, dt);
     this.renderer.render(this.view(this.acc / SIM_DT), dt);
   }
 
@@ -220,6 +224,7 @@ export class Session {
     this.hud.serveHint(w.phase === 'serve' && w.serve && w.serve.id === me.id && w.serve.state === 'ready');
     const ball = w.displayBall();
     const players = w.players.map(p => this.playerView(p, w.time, ball));
+    this.sneakers(w.players, dt);
     this.renderer.render({ players, ball, focus: me }, dt);
   }
 
@@ -274,6 +279,17 @@ export class Session {
     return { players, ball, focus };
   }
 
+  // Crissements de baskets lors des changements d'appui brusques
+  sneakers(players, dt) {
+    if (!this.prevVel) this.prevVel = players.map(() => [0, 0]);
+    players.forEach((p, i) => {
+      const pv = this.prevVel[i];
+      const acc = Math.hypot(p.vx - pv[0], p.vz - pv[1]) / Math.max(dt, 1e-3);
+      if (acc > 22 && Math.hypot(p.vx, p.vz) > 1.2 && Math.random() < 0.35) this.audio.squeak(this.pan(p.x));
+      pv[0] = p.vx; pv[1] = p.vz;
+    });
+  }
+
   // ---------- Événements : son, effets, interface ----------
   pan(x) {
     return clamp((x - this.renderer.camX) / 7, -1, 1) * this.side;
@@ -307,7 +323,7 @@ export class Session {
         break;
       }
       case 'setup': {
-        if (this.mode !== 'client') this.prev = this.capture();
+        if (this.mode !== 'client') { this.prev = this.capture(); this.setupT = this.sim.time; }
         this.updateScore();
         if (this.match.isGoldenPoint()) H.message("Point d'or !", 'gold', 1.6);
         if (e.faults === 1) H.message('2e service', 'small', 1.2);

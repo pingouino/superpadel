@@ -130,6 +130,11 @@ export class ClientWorld {
     }
 
     // mon joueur
+    // mon partenaire vient de frapper : mon coup armé est annulé
+    if (this.ref.lastHitTeam !== this.prevHitTeam) {
+      if (this.ref.lastHitTeam === me.team && !this.pending) me.armed = null;
+      this.prevHitTeam = this.ref.lastHitTeam;
+    }
     me.wantX = input.wx; me.wantZ = input.wz;
     me.aimX = input.mx; me.aimZ = input.my; me.held = input.held;
     if (this.phase === 'serve' && this.serve && this.serve.id === me.id && this.serve.state !== 'ready') { me.wantX = 0; me.wantZ = 0; }

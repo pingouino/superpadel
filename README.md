@@ -66,6 +66,7 @@ garde le jeu fluide malgré la latence.
 ## Tests
 
 ```bash
+node tools/rulestest.mjs       # règles (score, tie-break, arbitrage)
 node tools/simtest.mjs 2 3     # 3 matchs IA contre IA, niveau Confirmé
 node tools/humantest.mjs 2     # un "humain" scripté contre l'IA
 node tools/nettest.mjs 0.08    # hôte + client avec 80 ms de latence simulée
